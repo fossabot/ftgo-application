@@ -5,9 +5,9 @@ org.springframework.cloud.contract.spec.Contract.make {
     input {
         messageFrom('consumerService')
         messageBody([
-            consumerId: 1511300065921L,
-            orderId: 1,
-            orderTotal: "61.70"
+                consumerId: 1511300065921L,
+                orderId   : 1,
+                orderTotal: "61.70"
         ])
         messageHeaders {
         }

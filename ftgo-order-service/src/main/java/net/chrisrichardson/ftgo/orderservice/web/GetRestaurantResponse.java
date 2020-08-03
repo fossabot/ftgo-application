@@ -1,21 +1,21 @@
 package net.chrisrichardson.ftgo.orderservice.web;
 
 public class GetRestaurantResponse {
-  private long restaurantId;
+    private long restaurantId;
 
-  private GetRestaurantResponse() {
-  }
+    private GetRestaurantResponse() {
+    }
 
-  public GetRestaurantResponse(long restaurantId) {
+    public GetRestaurantResponse(long restaurantId) {
 
-    this.restaurantId = restaurantId;
-  }
+        this.restaurantId = restaurantId;
+    }
 
-  public long getRestaurantId() {
-    return restaurantId;
-  }
+    public long getRestaurantId() {
+        return restaurantId;
+    }
 
-  public void setRestaurantId(long restaurantId) {
-    this.restaurantId = restaurantId;
-  }
+    public void setRestaurantId(long restaurantId) {
+        this.restaurantId = restaurantId;
+    }
 }

@@ -2,7 +2,7 @@ const {FtgoGraphQLClient} = require("../common/ftgo-graphql-client.js");
 const {graphql} = require('graphql');
 const {schema} = require("../../src/schema");
 
-const{ SchemaLink } = require('apollo-link-schema');
+const {SchemaLink} = require('apollo-link-schema');
 const {ApolloClient} = require("apollo-client");
 const {InMemoryCache} = require('apollo-cache-inmemory');
 
@@ -28,7 +28,7 @@ test('findConsumerWithOrders', () => {
         return {id: 101, name: 'Ajanta'}
     });
 
-    const link = new SchemaLink({ schema: schema, context });
+    const link = new SchemaLink({schema: schema, context});
     const cache = new InMemoryCache();
 
     const c = new ApolloClient({

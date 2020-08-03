@@ -19,34 +19,32 @@ import java.util.Collections;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = AbstractKitchenServiceConsumerContractTest.TestConfiguration.class, webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @AutoConfigureMessageVerifier
 public abstract class AbstractKitchenServiceConsumerContractTest {
 
-  @Configuration
-  @Import({KitchenServiceMessageHandlersConfiguration.class, EventuateContractVerifierConfiguration.class})
-  public static class TestConfiguration {
+    @Configuration
+    @Import({KitchenServiceMessageHandlersConfiguration.class, EventuateContractVerifierConfiguration.class})
+    public static class TestConfiguration {
 
-    @Bean
-    public KitchenService kitchenService() {
-      return mock(KitchenService.class);
+        @Bean
+        public KitchenService kitchenService() {
+            return mock(KitchenService.class);
+        }
+
     }
 
-  }
+    @Autowired
+    private KitchenService kitchenService;
 
-  @Autowired
-  private KitchenService kitchenService;
-
-  @Before
-  public void setup() {
-     reset(kitchenService);
-     when(kitchenService.createTicket(eq(1L), eq(99L), any(TicketDetails.class)))
-             .thenReturn(new Ticket(1L, 99L, new TicketDetails(Collections.emptyList())));
-  }
+    @Before
+    public void setup() {
+        reset(kitchenService);
+        when(kitchenService.createTicket(eq(1L), eq(99L), any(TicketDetails.class)))
+                .thenReturn(new Ticket(1L, 99L, new TicketDetails(Collections.emptyList())));
+    }
 
 }

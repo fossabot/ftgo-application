@@ -2,10 +2,10 @@ package net.chrisrichardson.ftgo.orderservice.sagaparticipants;
 
 public class ApproveOrderCommand extends OrderCommand {
 
-  private ApproveOrderCommand() {
-  }
+    private ApproveOrderCommand() {
+    }
 
-  public ApproveOrderCommand(long orderId) {
-    super(orderId);
-  }
+    public ApproveOrderCommand(long orderId) {
+        super(orderId);
+    }
 }

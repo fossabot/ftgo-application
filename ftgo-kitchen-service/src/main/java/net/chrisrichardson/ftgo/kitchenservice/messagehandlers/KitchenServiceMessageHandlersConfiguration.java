@@ -3,7 +3,6 @@ package net.chrisrichardson.ftgo.kitchenservice.messagehandlers;
 import io.eventuate.tram.events.subscriber.DomainEventDispatcher;
 import io.eventuate.tram.events.subscriber.DomainEventDispatcherFactory;
 import io.eventuate.tram.events.subscriber.TramEventSubscriberConfiguration;
-import io.eventuate.tram.messaging.consumer.MessageConsumer;
 import io.eventuate.tram.sagas.participant.SagaCommandDispatcher;
 import io.eventuate.tram.sagas.participant.SagaCommandDispatcherFactory;
 import io.eventuate.tram.sagas.participant.SagaParticipantConfiguration;
@@ -17,23 +16,23 @@ import org.springframework.context.annotation.Import;
 @Import({KitchenDomainConfiguration.class, SagaParticipantConfiguration.class, CommonConfiguration.class, TramEventSubscriberConfiguration.class, SagaParticipantConfiguration.class})
 public class KitchenServiceMessageHandlersConfiguration {
 
-  @Bean
-  public KitchenServiceEventConsumer ticketEventConsumer() {
-    return new KitchenServiceEventConsumer();
-  }
+    @Bean
+    public KitchenServiceEventConsumer ticketEventConsumer() {
+        return new KitchenServiceEventConsumer();
+    }
 
-  @Bean
-  public KitchenServiceCommandHandler kitchenServiceCommandHandler() {
-    return new KitchenServiceCommandHandler();
-  }
+    @Bean
+    public KitchenServiceCommandHandler kitchenServiceCommandHandler() {
+        return new KitchenServiceCommandHandler();
+    }
 
-  @Bean
-  public SagaCommandDispatcher kitchenServiceSagaCommandDispatcher(KitchenServiceCommandHandler kitchenServiceCommandHandler, SagaCommandDispatcherFactory sagaCommandDispatcherFactory) {
-    return sagaCommandDispatcherFactory.make("kitchenServiceCommands", kitchenServiceCommandHandler.commandHandlers());
-  }
+    @Bean
+    public SagaCommandDispatcher kitchenServiceSagaCommandDispatcher(KitchenServiceCommandHandler kitchenServiceCommandHandler, SagaCommandDispatcherFactory sagaCommandDispatcherFactory) {
+        return sagaCommandDispatcherFactory.make("kitchenServiceCommands", kitchenServiceCommandHandler.commandHandlers());
+    }
 
-  @Bean
-  public DomainEventDispatcher domainEventDispatcher(KitchenServiceEventConsumer kitchenServiceEventConsumer, DomainEventDispatcherFactory domainEventDispatcherFactory) {
-    return domainEventDispatcherFactory.make("kitchenServiceEvents", kitchenServiceEventConsumer.domainEventHandlers());
-  }
+    @Bean
+    public DomainEventDispatcher domainEventDispatcher(KitchenServiceEventConsumer kitchenServiceEventConsumer, DomainEventDispatcherFactory domainEventDispatcherFactory) {
+        return domainEventDispatcherFactory.make("kitchenServiceEvents", kitchenServiceEventConsumer.domainEventHandlers());
+    }
 }

@@ -6,7 +6,6 @@ import net.chrisrichardson.ftgo.kitchenservice.messagehandlers.KitchenServiceMes
 import net.chrisrichardson.ftgo.kitchenservice.web.KitchenServiceWebConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
 @SpringBootApplication
@@ -15,7 +14,7 @@ import org.springframework.context.annotation.Import;
         CommonSwaggerConfiguration.class})
 public class KitchenServiceMain {
 
-  public static void main(String[] args) {
-    SpringApplication.run(KitchenServiceMain.class, args);
-  }
+    public static void main(String[] args) {
+        SpringApplication.run(KitchenServiceMain.class, args);
+    }
 }

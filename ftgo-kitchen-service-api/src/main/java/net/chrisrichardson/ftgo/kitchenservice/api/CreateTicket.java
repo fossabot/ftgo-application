@@ -7,46 +7,46 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 @CommandDestination("restaurantService")
 public class CreateTicket implements Command {
 
-  private Long orderId;
-  private TicketDetails ticketDetails;
-  private long restaurantId;
+    private Long orderId;
+    private TicketDetails ticketDetails;
+    private long restaurantId;
 
-  @Override
-  public String toString() {
-    return ToStringBuilder.reflectionToString(this);
-  }
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
 
-  public Long getOrderId() {
-    return orderId;
-  }
+    public Long getOrderId() {
+        return orderId;
+    }
 
-  public void setOrderId(Long orderId) {
-    this.orderId = orderId;
-  }
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
+    }
 
-  public TicketDetails getTicketDetails() {
-    return ticketDetails;
-  }
+    public TicketDetails getTicketDetails() {
+        return ticketDetails;
+    }
 
-  public void setTicketDetails(TicketDetails orderDetails) {
-    this.ticketDetails = orderDetails;
-  }
+    public void setTicketDetails(TicketDetails orderDetails) {
+        this.ticketDetails = orderDetails;
+    }
 
-  private CreateTicket() {
+    private CreateTicket() {
 
-  }
+    }
 
-  public CreateTicket(long restaurantId, long orderId, TicketDetails ticketDetails) {
-    this.restaurantId = restaurantId;
-    this.orderId = orderId;
-    this.ticketDetails = ticketDetails;
-  }
+    public CreateTicket(long restaurantId, long orderId, TicketDetails ticketDetails) {
+        this.restaurantId = restaurantId;
+        this.orderId = orderId;
+        this.ticketDetails = ticketDetails;
+    }
 
-  public long getRestaurantId() {
-    return restaurantId;
-  }
+    public long getRestaurantId() {
+        return restaurantId;
+    }
 
-  public void setRestaurantId(long restaurantId) {
-    this.restaurantId = restaurantId;
-  }
+    public void setRestaurantId(long restaurantId) {
+        this.restaurantId = restaurantId;
+    }
 }

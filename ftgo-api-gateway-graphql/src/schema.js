@@ -1,4 +1,4 @@
-const { makeExecutableSchema } = require("graphql-tools");
+const {makeExecutableSchema} = require("graphql-tools");
 
 const fetch = require("node-fetch");
 
@@ -58,16 +58,16 @@ const typeDefs = gql`
 
 `;
 
-function resolveOrders(_, { consumerId }, context) {
-  return context.orderServiceProxy.findOrders(consumerId);
+function resolveOrders(_, {consumerId}, context) {
+    return context.orderServiceProxy.findOrders(consumerId);
 }
 
-function resolveConsumer(_, { consumerId }, context) {
-  return context.consumerServiceProxy.findConsumer(consumerId);
+function resolveConsumer(_, {consumerId}, context) {
+    return context.consumerServiceProxy.findConsumer(consumerId);
 }
 
-function resolveOrder(_, { orderId }, context) {
-  return context.orderServiceProxy.findOrder(orderId);
+function resolveOrder(_, {orderId}, context) {
+    return context.orderServiceProxy.findOrder(orderId);
 }
 
 function resolveOrderConsumer({consumerId}, args, context) {
@@ -83,33 +83,33 @@ function resolveOrderDeliveryInfo({orderId}, args, context) {
 }
 
 function resolveConsumerOrders({id, orders}, args, context) {
-  return orders || context.orderServiceProxy.findOrders(id)
+    return orders || context.orderServiceProxy.findOrders(id)
 }
 
-function createConsumer(_, { c: {firstName, lastName} }, context) {
-  return context.consumerServiceProxy.createConsumer(firstName, lastName);
+function createConsumer(_, {c: {firstName, lastName}}, context) {
+    return context.consumerServiceProxy.createConsumer(firstName, lastName);
 }
 
 const resolvers = {
-  Query: {
-    orders: resolveOrders,
-    consumer: resolveConsumer,
-    order: resolveOrder
-  },
-  Mutation: {
-    createConsumer: createConsumer
-  },
-  Order: {
-    consumer: resolveOrderConsumer,
-    restaurant: resolveOrderRestaurant,
-    deliveryInfo: resolveOrderDeliveryInfo
-  },
-  Consumer: {
-    orders: resolveConsumerOrders
-  }
+    Query: {
+        orders: resolveOrders,
+        consumer: resolveConsumer,
+        order: resolveOrder
+    },
+    Mutation: {
+        createConsumer: createConsumer
+    },
+    Order: {
+        consumer: resolveOrderConsumer,
+        restaurant: resolveOrderRestaurant,
+        deliveryInfo: resolveOrderDeliveryInfo
+    },
+    Consumer: {
+        orders: resolveConsumerOrders
+    }
 };
 
-const schema = makeExecutableSchema({ typeDefs, resolvers });
+const schema = makeExecutableSchema({typeDefs, resolvers});
 
 
-module.exports = { schema };
+module.exports = {schema};

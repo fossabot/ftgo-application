@@ -11,12 +11,12 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties(ConsumerDestinations.class)
 public class ConsumerConfiguration {
 
-  @Bean
-  public RouteLocator consumerProxyRouting(RouteLocatorBuilder builder, ConsumerDestinations consumerDestinations) {
-    return builder.routes()
-            .route(r -> r.path("/consumers").and().method("POST").uri(consumerDestinations.getConsumerServiceUrl()))
-            .route(r -> r.path("/consumers").and().method("PUT").uri(consumerDestinations.getConsumerServiceUrl()))
-            .build();
-  }
+    @Bean
+    public RouteLocator consumerProxyRouting(RouteLocatorBuilder builder, ConsumerDestinations consumerDestinations) {
+        return builder.routes()
+                .route(r -> r.path("/consumers").and().method("POST").uri(consumerDestinations.getConsumerServiceUrl()))
+                .route(r -> r.path("/consumers").and().method("PUT").uri(consumerDestinations.getConsumerServiceUrl()))
+                .build();
+    }
 
 }

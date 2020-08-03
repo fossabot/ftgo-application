@@ -1,6 +1,5 @@
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.tasks.testing.Test
 
 class FtgoServicePlugin implements Plugin<Project> {
 
@@ -8,7 +7,7 @@ class FtgoServicePlugin implements Plugin<Project> {
     void apply(Project project) {
 
         project.apply(plugin: 'org.springframework.boot')
-    	project.apply(plugin: "io.spring.dependency-management")
+        project.apply(plugin: "io.spring.dependency-management")
 
         project.dependencyManagement {
             imports {

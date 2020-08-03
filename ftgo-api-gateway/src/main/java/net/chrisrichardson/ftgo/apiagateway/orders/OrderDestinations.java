@@ -7,26 +7,26 @@ import javax.validation.constraints.NotNull;
 @ConfigurationProperties(prefix = "order.destinations")
 public class OrderDestinations {
 
-  @NotNull
-  private String orderServiceUrl;
+    @NotNull
+    private String orderServiceUrl;
 
-  @NotNull
-  private String orderHistoryServiceUrl;
+    @NotNull
+    private String orderHistoryServiceUrl;
 
-  public String getOrderHistoryServiceUrl() {
-    return orderHistoryServiceUrl;
-  }
+    public String getOrderHistoryServiceUrl() {
+        return orderHistoryServiceUrl;
+    }
 
-  public void setOrderHistoryServiceUrl(String orderHistoryServiceUrl) {
-    this.orderHistoryServiceUrl = orderHistoryServiceUrl;
-  }
+    public void setOrderHistoryServiceUrl(String orderHistoryServiceUrl) {
+        this.orderHistoryServiceUrl = orderHistoryServiceUrl;
+    }
 
 
-  public String getOrderServiceUrl() {
-    return orderServiceUrl;
-  }
+    public String getOrderServiceUrl() {
+        return orderServiceUrl;
+    }
 
-  public void setOrderServiceUrl(String orderServiceUrl) {
-    this.orderServiceUrl = orderServiceUrl;
-  }
+    public void setOrderServiceUrl(String orderServiceUrl) {
+        this.orderServiceUrl = orderServiceUrl;
+    }
 }

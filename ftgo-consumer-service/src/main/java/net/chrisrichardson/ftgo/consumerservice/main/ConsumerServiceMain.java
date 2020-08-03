@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Import;
 @Import({ConsumerWebConfiguration.class, TramJdbcKafkaConfiguration.class, CommonSwaggerConfiguration.class})
 public class ConsumerServiceMain {
 
-  public static void main(String[] args) {
-    SpringApplication.run(ConsumerServiceMain.class, args);
-  }
+    public static void main(String[] args) {
+        SpringApplication.run(ConsumerServiceMain.class, args);
+    }
 }

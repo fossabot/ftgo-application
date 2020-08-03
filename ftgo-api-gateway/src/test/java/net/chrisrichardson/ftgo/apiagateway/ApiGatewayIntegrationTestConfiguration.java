@@ -11,13 +11,13 @@ import org.springframework.context.annotation.Configuration;
 @ComponentScan
 public class ApiGatewayIntegrationTestConfiguration {
 
-  // Force it to be Netty to avoid casting exception in NettyWriteResponseFilter
-  // Wiremock adds dependency on Jetty
+    // Force it to be Netty to avoid casting exception in NettyWriteResponseFilter
+    // Wiremock adds dependency on Jetty
 
-  @Bean
-  public NettyReactiveWebServerFactory NettyReactiveWebServerFactory() {
-    return new NettyReactiveWebServerFactory();
-  }
+    @Bean
+    public NettyReactiveWebServerFactory NettyReactiveWebServerFactory() {
+        return new NettyReactiveWebServerFactory();
+    }
 
 
 }

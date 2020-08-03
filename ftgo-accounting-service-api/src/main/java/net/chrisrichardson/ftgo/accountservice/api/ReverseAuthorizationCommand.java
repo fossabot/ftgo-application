@@ -5,42 +5,42 @@ import io.eventuate.tram.commands.common.Command;
 import net.chrisrichardson.ftgo.common.Money;
 
 public class ReverseAuthorizationCommand implements Command {
-  private long consumerId;
-  private Long orderId;
-  private Money orderTotal;
+    private long consumerId;
+    private Long orderId;
+    private Money orderTotal;
 
-  private ReverseAuthorizationCommand() {
-  }
+    private ReverseAuthorizationCommand() {
+    }
 
-  public ReverseAuthorizationCommand(long consumerId, Long orderId, Money orderTotal) {
-    this.consumerId = consumerId;
-    this.orderId = orderId;
-    this.orderTotal = orderTotal;
-  }
+    public ReverseAuthorizationCommand(long consumerId, Long orderId, Money orderTotal) {
+        this.consumerId = consumerId;
+        this.orderId = orderId;
+        this.orderTotal = orderTotal;
+    }
 
-  public long getConsumerId() {
-    return consumerId;
-  }
+    public long getConsumerId() {
+        return consumerId;
+    }
 
-  public void setConsumerId(long consumerId) {
-    this.consumerId = consumerId;
-  }
+    public void setConsumerId(long consumerId) {
+        this.consumerId = consumerId;
+    }
 
-  public Money getOrderTotal() {
-    return orderTotal;
-  }
+    public Money getOrderTotal() {
+        return orderTotal;
+    }
 
-  public void setOrderTotal(Money orderTotal) {
-    this.orderTotal = orderTotal;
-  }
+    public void setOrderTotal(Money orderTotal) {
+        this.orderTotal = orderTotal;
+    }
 
-  public Long getOrderId() {
+    public Long getOrderId() {
 
-    return orderId;
+        return orderId;
 
-  }
+    }
 
-  public void setOrderId(Long orderId) {
-    this.orderId = orderId;
-  }
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
+    }
 }

@@ -4,17 +4,17 @@ import net.chrisrichardson.ftgo.orderservice.domain.OrderRevision;
 
 public class ConfirmReviseOrderCommand extends OrderCommand {
 
-  private ConfirmReviseOrderCommand() {
-  }
+    private ConfirmReviseOrderCommand() {
+    }
 
-  public ConfirmReviseOrderCommand(long orderId, OrderRevision revision) {
-    super(orderId);
-    this.revision = revision;
-  }
+    public ConfirmReviseOrderCommand(long orderId, OrderRevision revision) {
+        super(orderId);
+        this.revision = revision;
+    }
 
-  private OrderRevision revision;
+    private OrderRevision revision;
 
-  public OrderRevision getRevision() {
-    return revision;
-  }
+    public OrderRevision getRevision() {
+        return revision;
+    }
 }

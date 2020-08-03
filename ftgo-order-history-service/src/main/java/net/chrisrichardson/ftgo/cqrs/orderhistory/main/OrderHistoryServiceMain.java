@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Import;
         EventuateTramKafkaMessageConsumerConfiguration.class})
 public class OrderHistoryServiceMain {
 
-  public static void main(String[] args) {
-    SpringApplication.run(OrderHistoryServiceMain.class, args);
-  }
+    public static void main(String[] args) {
+        SpringApplication.run(OrderHistoryServiceMain.class, args);
+    }
 }

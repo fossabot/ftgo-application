@@ -24,7 +24,7 @@ dependencyManagement {
 }
 
 configurations.all {
-    exclude  module: "spring-boot-starter-web"
+    exclude module: "spring-boot-starter-web"
 }
 
 repositories {

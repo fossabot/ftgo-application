@@ -8,8 +8,11 @@
     "noImplicitAny": true,
     "allowJs": true,
     "noImplicitAny": false,
-    "lib": ["esnext.asynciterable", "es2015"],
-    "baseUrl" : "./src",
+    "lib": [
+      "esnext.asynciterable",
+      "es2015"
+    ],
+    "baseUrl": "./src",
     "paths": {
       "*": [
         "src/types/*"

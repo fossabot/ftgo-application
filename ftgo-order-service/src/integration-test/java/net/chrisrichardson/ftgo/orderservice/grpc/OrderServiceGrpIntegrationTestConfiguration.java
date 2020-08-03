@@ -11,8 +11,8 @@ import static org.mockito.Mockito.mock;
 @Import(GrpcConfiguration.class)
 public class OrderServiceGrpIntegrationTestConfiguration {
 
-  @Bean
-  public OrderService orderService() {
-    return mock(OrderService.class);
-  }
+    @Bean
+    public OrderService orderService() {
+        return mock(OrderService.class);
+    }
 }

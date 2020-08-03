@@ -16,8 +16,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Import({TramEventsPublisherConfiguration.class, CommonConfiguration.class})
 public class RestaurantServiceDomainConfiguration {
 
-  @Bean
-  public RestaurantService restaurantService() {
-    return new RestaurantService();
-  }
+    @Bean
+    public RestaurantService restaurantService() {
+        return new RestaurantService();
+    }
 }

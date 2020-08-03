@@ -5,41 +5,41 @@ import io.eventuate.tram.commands.common.Command;
 import java.util.Map;
 
 public class ConfirmReviseTicketCommand implements Command {
-  private long restaurantId;
-  private long orderId;
-  private Map<String, Integer> revisedLineItemQuantities;
+    private long restaurantId;
+    private long orderId;
+    private Map<String, Integer> revisedLineItemQuantities;
 
-  private ConfirmReviseTicketCommand() {
-  }
+    private ConfirmReviseTicketCommand() {
+    }
 
-  public ConfirmReviseTicketCommand(long restaurantId, Long orderId, Map<String, Integer> revisedLineItemQuantities) {
+    public ConfirmReviseTicketCommand(long restaurantId, Long orderId, Map<String, Integer> revisedLineItemQuantities) {
 
-    this.restaurantId = restaurantId;
-    this.orderId = orderId;
-    this.revisedLineItemQuantities = revisedLineItemQuantities;
-  }
+        this.restaurantId = restaurantId;
+        this.orderId = orderId;
+        this.revisedLineItemQuantities = revisedLineItemQuantities;
+    }
 
-  public long getOrderId() {
-    return orderId;
-  }
+    public long getOrderId() {
+        return orderId;
+    }
 
-  public void setOrderId(long orderId) {
-    this.orderId = orderId;
-  }
+    public void setOrderId(long orderId) {
+        this.orderId = orderId;
+    }
 
-  public long getRestaurantId() {
-    return restaurantId;
-  }
+    public long getRestaurantId() {
+        return restaurantId;
+    }
 
-  public void setRestaurantId(long restaurantId) {
-    this.restaurantId = restaurantId;
-  }
+    public void setRestaurantId(long restaurantId) {
+        this.restaurantId = restaurantId;
+    }
 
-  public Map<String, Integer> getRevisedLineItemQuantities() {
-    return revisedLineItemQuantities;
-  }
+    public Map<String, Integer> getRevisedLineItemQuantities() {
+        return revisedLineItemQuantities;
+    }
 
-  public void setRevisedLineItemQuantities(Map<String, Integer> revisedLineItemQuantities) {
-    this.revisedLineItemQuantities = revisedLineItemQuantities;
-  }
+    public void setRevisedLineItemQuantities(Map<String, Integer> revisedLineItemQuantities) {
+        this.revisedLineItemQuantities = revisedLineItemQuantities;
+    }
 }

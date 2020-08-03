@@ -4,21 +4,21 @@ import net.chrisrichardson.ftgo.orderservice.domain.OrderRevision;
 
 public class BeginReviseOrderCommand extends OrderCommand {
 
-  private BeginReviseOrderCommand() {
-  }
+    private BeginReviseOrderCommand() {
+    }
 
-  public BeginReviseOrderCommand(long orderId, OrderRevision revision) {
-    super(orderId);
-    this.revision = revision;
-  }
+    public BeginReviseOrderCommand(long orderId, OrderRevision revision) {
+        super(orderId);
+        this.revision = revision;
+    }
 
-  private OrderRevision revision;
+    private OrderRevision revision;
 
-  public OrderRevision getRevision() {
-    return revision;
-  }
+    public OrderRevision getRevision() {
+        return revision;
+    }
 
-  public void setRevision(OrderRevision revision) {
-    this.revision = revision;
-  }
+    public void setRevision(OrderRevision revision) {
+        this.revision = revision;
+    }
 }

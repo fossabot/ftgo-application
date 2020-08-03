@@ -7,8 +7,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class GrpcConfiguration {
 
-  @Bean
-  public OrderServiceServer helloWorldServer(OrderService orderService) {
-    return new OrderServiceServer(orderService);
-  }
+    @Bean
+    public OrderServiceServer helloWorldServer(OrderService orderService) {
+        return new OrderServiceServer(orderService);
+    }
 }

@@ -18,14 +18,14 @@ import org.springframework.context.annotation.Primary;
 @ComponentScan
 public class RestaurantServiceMain {
 
-  @Bean
-  @Primary // conflicts with _halObjectMapper
-  public ObjectMapper objectMapper() {
-    return JSonMapper.objectMapper;
-  }
+    @Bean
+    @Primary // conflicts with _halObjectMapper
+    public ObjectMapper objectMapper() {
+        return JSonMapper.objectMapper;
+    }
 
-  public static void main(String[] args) {
-    SpringApplication.run(RestaurantServiceMain.class, args);
-  }
+    public static void main(String[] args) {
+        SpringApplication.run(RestaurantServiceMain.class, args);
+    }
 
 }

@@ -3,8 +3,6 @@ package net.chrisrichardson.ftgo.orderservice.contract;
 import io.eventuate.tram.events.publisher.DomainEventPublisher;
 import io.eventuate.tram.events.publisher.TramEventsPublisherConfiguration;
 import io.eventuate.tram.inmemory.TramInMemoryConfiguration;
-import io.eventuate.tram.messaging.common.ChannelMapping;
-import io.eventuate.tram.messaging.common.DefaultChannelMapping;
 import io.eventuate.tram.springcloudcontractsupport.EventuateContractVerifierConfiguration;
 import net.chrisrichardson.ftgo.orderservice.api.events.OrderCreatedEvent;
 import net.chrisrichardson.ftgo.orderservice.domain.OrderDomainEventPublisher;
@@ -29,24 +27,24 @@ import static net.chrisrichardson.ftgo.orderservice.RestaurantMother.AJANTA_REST
 @AutoConfigureMessageVerifier
 public abstract class MessagingBase {
 
-  @Configuration
-  @EnableAutoConfiguration
-  @Import({EventuateContractVerifierConfiguration.class, TramEventsPublisherConfiguration.class, TramInMemoryConfiguration.class})
-  public static class TestConfiguration {
+    @Configuration
+    @EnableAutoConfiguration
+    @Import({EventuateContractVerifierConfiguration.class, TramEventsPublisherConfiguration.class, TramInMemoryConfiguration.class})
+    public static class TestConfiguration {
 
-    @Bean
-    public OrderDomainEventPublisher orderAggregateEventPublisher(DomainEventPublisher eventPublisher) {
-      return new OrderDomainEventPublisher(eventPublisher);
+        @Bean
+        public OrderDomainEventPublisher orderAggregateEventPublisher(DomainEventPublisher eventPublisher) {
+            return new OrderDomainEventPublisher(eventPublisher);
+        }
     }
-  }
 
 
-  @Autowired
-  private OrderDomainEventPublisher orderAggregateEventPublisher;
+    @Autowired
+    private OrderDomainEventPublisher orderAggregateEventPublisher;
 
-  protected void orderCreated() {
-    orderAggregateEventPublisher.publish(CHICKEN_VINDALOO_ORDER,
-            Collections.singletonList(new OrderCreatedEvent(CHICKEN_VINDALOO_ORDER_DETAILS, AJANTA_RESTAURANT_NAME)));
-  }
+    protected void orderCreated() {
+        orderAggregateEventPublisher.publish(CHICKEN_VINDALOO_ORDER,
+                Collections.singletonList(new OrderCreatedEvent(CHICKEN_VINDALOO_ORDER_DETAILS, AJANTA_RESTAURANT_NAME)));
+    }
 
 }

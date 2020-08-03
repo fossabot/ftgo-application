@@ -13,14 +13,14 @@ import org.springframework.context.annotation.Import;
 @Import({SagaParticipantConfiguration.class, TramEventsPublisherConfiguration.class, CommonConfiguration.class, SagaParticipantConfiguration.class})
 public class OrderCommandHandlersConfiguration {
 
-  @Bean
-  public OrderCommandHandlers orderCommandHandlers() {
-    return new OrderCommandHandlers();
-  }
+    @Bean
+    public OrderCommandHandlers orderCommandHandlers() {
+        return new OrderCommandHandlers();
+    }
 
-  @Bean
-  public SagaCommandDispatcher orderCommandHandlersDispatcher(OrderCommandHandlers orderCommandHandlers, SagaCommandDispatcherFactory sagaCommandDispatcherFactory) {
-    return sagaCommandDispatcherFactory.make("orderService", orderCommandHandlers.commandHandlers());
-  }
+    @Bean
+    public SagaCommandDispatcher orderCommandHandlersDispatcher(OrderCommandHandlers orderCommandHandlers, SagaCommandDispatcherFactory sagaCommandDispatcherFactory) {
+        return sagaCommandDispatcherFactory.make("orderService", orderCommandHandlers.commandHandlers());
+    }
 
 }

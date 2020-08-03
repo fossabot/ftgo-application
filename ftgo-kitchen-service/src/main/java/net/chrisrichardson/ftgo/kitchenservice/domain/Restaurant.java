@@ -5,14 +5,7 @@ import net.chrisrichardson.ftgo.kitchenservice.api.TicketDetails;
 import net.chrisrichardson.ftgo.restaurantservice.events.MenuItem;
 import net.chrisrichardson.ftgo.restaurantservice.events.RestaurantMenu;
 
-import javax.persistence.Access;
-import javax.persistence.AccessType;
-import javax.persistence.CollectionTable;
-import javax.persistence.ElementCollection;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
@@ -20,32 +13,32 @@ import java.util.List;
 @Access(AccessType.FIELD)
 public class Restaurant {
 
-  @Id
-  private Long id;
+    @Id
+    private Long id;
 
-  @Embedded
-  @ElementCollection
-  @CollectionTable(name = "kitchen_service_restaurant_menu_items")
-  private List<MenuItem> menuItems;
+    @Embedded
+    @ElementCollection
+    @CollectionTable(name = "kitchen_service_restaurant_menu_items")
+    private List<MenuItem> menuItems;
 
-  private Restaurant() {
-  }
+    private Restaurant() {
+    }
 
-  public Restaurant(long id, List<MenuItem> menuItems) {
-    this.id = id;
-    this.menuItems = menuItems;
-  }
+    public Restaurant(long id, List<MenuItem> menuItems) {
+        this.id = id;
+        this.menuItems = menuItems;
+    }
 
-  public List<DomainEvent> reviseMenu(RestaurantMenu revisedMenu) {
-    throw new UnsupportedOperationException();
-  }
+    public List<DomainEvent> reviseMenu(RestaurantMenu revisedMenu) {
+        throw new UnsupportedOperationException();
+    }
 
-  public void verifyRestaurantDetails(TicketDetails ticketDetails) {
-    // TODO - implement me
-  }
+    public void verifyRestaurantDetails(TicketDetails ticketDetails) {
+        // TODO - implement me
+    }
 
-  public Long getId() {
-    return id;
-  }
+    public Long getId() {
+        return id;
+    }
 
 }

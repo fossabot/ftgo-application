@@ -2,7 +2,6 @@ package net.chrisrichardson.ftgo.orderservice.grpc;
 
 
 import net.chrisrichardson.ftgo.orderservice.domain.Order;
-import net.chrisrichardson.ftgo.orderservice.domain.OrderJpaTestConfiguration;
 import net.chrisrichardson.ftgo.orderservice.domain.OrderService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,21 +18,21 @@ import static org.mockito.Mockito.when;
 @SpringBootTest(classes = OrderServiceGrpIntegrationTestConfiguration.class, webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class OrderServiceGrpIntegrationTest {
 
-  @Autowired
-  private OrderService orderService;
+    @Autowired
+    private OrderService orderService;
 
-  @Test
-  public void shouldCreateOrder() {
+    @Test
+    public void shouldCreateOrder() {
 
-    Order order = new Order(1, 2, Collections.emptyList());
-    order.setId(101L);
+        Order order = new Order(1, 2, Collections.emptyList());
+        order.setId(101L);
 
-    when(orderService.createOrder(1, 2, Collections.emptyList())).thenReturn(order);
-    OrderServiceClient client = new OrderServiceClient("localhost", 50051);
+        when(orderService.createOrder(1, 2, Collections.emptyList())).thenReturn(order);
+        OrderServiceClient client = new OrderServiceClient("localhost", 50051);
 
-    long orderId = client.createOrder(1, 2, Collections.emptyList());
+        long orderId = client.createOrder(1, 2, Collections.emptyList());
 
-    assertEquals(101L, orderId);
+        assertEquals(101L, orderId);
 
-  }
+    }
 }

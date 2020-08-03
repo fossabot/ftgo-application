@@ -33,64 +33,64 @@ import static org.junit.Assert.assertNotNull;
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ConsumerServiceInMemoryIntegrationTest {
 
-  private Logger logger = LoggerFactory.getLogger(getClass());
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
-  @Value("${local.server.port}")
-  private int port;
+    @Value("${local.server.port}")
+    private int port;
 
-  @Configuration
-  @Import({ConsumerWebConfiguration.class,
-          TramCommandProducerConfiguration.class,
-          TramInMemoryConfiguration.class})
-  public static class TestConfiguration {
+    @Configuration
+    @Import({ConsumerWebConfiguration.class,
+            TramCommandProducerConfiguration.class,
+            TramInMemoryConfiguration.class})
+    public static class TestConfiguration {
 
-    @Bean
-    public TestMessageConsumerFactory testMessageConsumerFactory() {
-      return new TestMessageConsumerFactory();
+        @Bean
+        public TestMessageConsumerFactory testMessageConsumerFactory() {
+            return new TestMessageConsumerFactory();
+        }
+
     }
 
-  }
+    private String baseUrl(String path) {
+        return "http://localhost:" + port + path;
+    }
 
-  private String baseUrl(String path) {
-    return "http://localhost:" + port + path;
-  }
+    @Autowired
+    private CommandProducer commandProducer;
 
-  @Autowired
-  private CommandProducer commandProducer;
+    @Autowired
+    private TestMessageConsumerFactory testMessageConsumerFactory;
 
-  @Autowired
-  private TestMessageConsumerFactory testMessageConsumerFactory;
+    @Test
+    public void shouldCreateConsumer() {
 
-  @Test
-  public void shouldCreateConsumer() {
+        String postUrl = baseUrl("/consumers");
 
-    String postUrl = baseUrl("/consumers");
+        Integer consumerId =
+                given().
+                        body(new CreateConsumerRequest(new PersonName("John", "Doe"))).
+                        contentType("application/json").
+                        when().
+                        post(postUrl).
+                        then().
+                        statusCode(200).
+                        extract().
+                        path("consumerId");
 
-    Integer consumerId =
-            given().
-            body(new CreateConsumerRequest(new PersonName("John", "Doe"))).
-            contentType("application/json").
-            when().
-            post(postUrl).
-            then().
-            statusCode(200).
-            extract().
-            path("consumerId");
-
-    assertNotNull(consumerId);
+        assertNotNull(consumerId);
 
 
-    TestMessageConsumer testMessageConsumer = testMessageConsumerFactory.make();
+        TestMessageConsumer testMessageConsumer = testMessageConsumerFactory.make();
 
-    long orderId = 999;
-    Money orderTotal = new Money(123);
+        long orderId = 999;
+        Money orderTotal = new Money(123);
 
-    String messageId = commandProducer.send("consumerService", null,
-            new ValidateOrderByConsumer(consumerId, orderId, orderTotal),
-            testMessageConsumer.getReplyChannel(), Collections.emptyMap());
+        String messageId = commandProducer.send("consumerService", null,
+                new ValidateOrderByConsumer(consumerId, orderId, orderTotal),
+                testMessageConsumer.getReplyChannel(), Collections.emptyMap());
 
-    testMessageConsumer.assertHasReplyTo(messageId);
+        testMessageConsumer.assertHasReplyTo(messageId);
 
-  }
+    }
 
 }

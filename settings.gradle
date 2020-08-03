@@ -1,4 +1,3 @@
-
 include "common-swagger"
 include "ftgo-test-util"
 include "ftgo-common"

@@ -4,6 +4,7 @@ const {ApolloClient} = require("apollo-client");
 const {createHttpLink} = require('apollo-link-http');
 const {InMemoryCache} = require('apollo-cache-inmemory');
 const gql = require('graphql-tag');
+
 // const{ createPersistedQueryLink } = require("apollo-link-persisted-queries");
 
 
@@ -28,7 +29,7 @@ class FtgoGraphQLClient {
 
     findConsumerWithOrders(consumerId) {
         return this.client.query({
-            variables: { cid: consumerId},
+            variables: {cid: consumerId},
             query: gql`
                 query foo($cid : Int!) { 
                     consumer(consumerId: $cid)  { 

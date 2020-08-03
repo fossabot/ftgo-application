@@ -13,13 +13,13 @@ import org.springframework.context.annotation.Import;
 public class AccountServiceConfiguration {
 
 
-  @Bean
-  public AggregateRepository<Account, AccountCommand> accountRepositorySync(EventuateAggregateStore aggregateStore) {
-    return new AggregateRepository<>(Account.class, aggregateStore);
-  }
+    @Bean
+    public AggregateRepository<Account, AccountCommand> accountRepositorySync(EventuateAggregateStore aggregateStore) {
+        return new AggregateRepository<>(Account.class, aggregateStore);
+    }
 
-  @Bean
-  public AccountingService accountingService() {
-    return new AccountingService();
-  }
+    @Bean
+    public AccountingService accountingService() {
+        return new AccountingService();
+    }
 }

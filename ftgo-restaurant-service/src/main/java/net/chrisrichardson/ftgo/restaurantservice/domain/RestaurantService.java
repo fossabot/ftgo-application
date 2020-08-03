@@ -13,20 +13,20 @@ import java.util.Optional;
 public class RestaurantService {
 
 
-  @Autowired
-  private RestaurantRepository restaurantRepository;
+    @Autowired
+    private RestaurantRepository restaurantRepository;
 
-  @Autowired
-  private DomainEventPublisher domainEventPublisher;
+    @Autowired
+    private DomainEventPublisher domainEventPublisher;
 
-  public Restaurant create(CreateRestaurantRequest request) {
-    Restaurant restaurant = new Restaurant(request.getName(), request.getMenu());
-    restaurantRepository.save(restaurant);
-    domainEventPublisher.publish(Restaurant.class, restaurant.getId(), Collections.singletonList(new RestaurantCreated(request.getName(), request.getMenu())));
-    return restaurant;
-  }
+    public Restaurant create(CreateRestaurantRequest request) {
+        Restaurant restaurant = new Restaurant(request.getName(), request.getMenu());
+        restaurantRepository.save(restaurant);
+        domainEventPublisher.publish(Restaurant.class, restaurant.getId(), Collections.singletonList(new RestaurantCreated(request.getName(), request.getMenu())));
+        return restaurant;
+    }
 
-  public Optional<Restaurant> findById(long restaurantId) {
-    return restaurantRepository.findById(restaurantId);
-  }
+    public Optional<Restaurant> findById(long restaurantId) {
+        return restaurantRepository.findById(restaurantId);
+    }
 }

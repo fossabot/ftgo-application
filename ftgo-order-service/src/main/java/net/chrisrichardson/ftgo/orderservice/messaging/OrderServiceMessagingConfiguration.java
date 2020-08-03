@@ -13,14 +13,14 @@ import org.springframework.context.annotation.Import;
 @Import({OrderServiceWithRepositoriesConfiguration.class, TramEventSubscriberConfiguration.class})
 public class OrderServiceMessagingConfiguration {
 
-  @Bean
-  public OrderEventConsumer orderEventConsumer(OrderService orderService) {
-    return new OrderEventConsumer(orderService);
-  }
+    @Bean
+    public OrderEventConsumer orderEventConsumer(OrderService orderService) {
+        return new OrderEventConsumer(orderService);
+    }
 
-  @Bean
-  public DomainEventDispatcher domainEventDispatcher(OrderEventConsumer orderEventConsumer, DomainEventDispatcherFactory domainEventDispatcherFactory) {
-    return domainEventDispatcherFactory.make("orderServiceEvents", orderEventConsumer.domainEventHandlers());
-  }
+    @Bean
+    public DomainEventDispatcher domainEventDispatcher(OrderEventConsumer orderEventConsumer, DomainEventDispatcherFactory domainEventDispatcherFactory) {
+        return domainEventDispatcherFactory.make("orderServiceEvents", orderEventConsumer.domainEventHandlers());
+    }
 
 }

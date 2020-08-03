@@ -19,23 +19,23 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class OrderServiceExternalComponentTest extends AbstractOrderServiceComponentTest {
 
 
-  static {
-    CommonJsonMapperInitializer.registerMoneyModule();
-  }
-  
-  private int port = 8082;
-  private String host = System.getenv("DOCKER_HOST_IP");
+    static {
+        CommonJsonMapperInitializer.registerMoneyModule();
+    }
 
-  @Override
-  protected String baseUrl(String path) {
-    return String.format("http://%s:%s%s", host, port, path);
-  }
+    private int port = 8082;
+    private String host = System.getenv("DOCKER_HOST_IP");
 
-  @Configuration
-  @EnableAutoConfiguration
-  @Import({CommonMessagingStubConfiguration.class,
-          TramCommandProducerConfiguration.class, TramEventsPublisherConfiguration.class,
-          TramJdbcKafkaConfiguration.class})
-  public static class TestConfiguration {
-  }
+    @Override
+    protected String baseUrl(String path) {
+        return String.format("http://%s:%s%s", host, port, path);
+    }
+
+    @Configuration
+    @EnableAutoConfiguration
+    @Import({CommonMessagingStubConfiguration.class,
+            TramCommandProducerConfiguration.class, TramEventsPublisherConfiguration.class,
+            TramJdbcKafkaConfiguration.class})
+    public static class TestConfiguration {
+    }
 }

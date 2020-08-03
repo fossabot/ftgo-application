@@ -20,28 +20,28 @@ import javax.sql.DataSource;
 public class OrderServiceInProcessComponentTest extends AbstractOrderServiceComponentTest {
 
 
-  @Value("${local.server.port}")
-  private int port;
+    @Value("${local.server.port}")
+    private int port;
 
-  @Override
-  protected String baseUrl(String path) {
-    return "http://localhost:" + port + path;
-  }
-
-  @Configuration
-  @EnableAutoConfiguration
-  @Import({CommonTestConfiguration.class, TramInMemoryConfiguration.class})
-  public static class TestConfiguration {
-
-    @Bean
-    public DataSource dataSource() {
-      EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
-      return builder.setType(EmbeddedDatabaseType.H2)
-              .addScript("eventuate-tram-embedded-schema.sql")
-              .addScript("eventuate-tram-sagas-embedded.sql")
-              .build();
+    @Override
+    protected String baseUrl(String path) {
+        return "http://localhost:" + port + path;
     }
 
+    @Configuration
+    @EnableAutoConfiguration
+    @Import({CommonTestConfiguration.class, TramInMemoryConfiguration.class})
+    public static class TestConfiguration {
 
-  }
+        @Bean
+        public DataSource dataSource() {
+            EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
+            return builder.setType(EmbeddedDatabaseType.H2)
+                    .addScript("eventuate-tram-embedded-schema.sql")
+                    .addScript("eventuate-tram-sagas-embedded.sql")
+                    .build();
+        }
+
+
+    }
 }

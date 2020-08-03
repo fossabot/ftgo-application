@@ -6,8 +6,8 @@ metadata:
     name: ftgo-kafka
 spec:
   ports:
-  - port: 9092
-    targetPort: 9092
+    - port: 9092
+      targetPort: 9092
   selector:
     role: ftgo-kafka
 ---
@@ -33,22 +33,22 @@ spec:
             - name: ZOOKEEPER_SERVERS
               value: ftgo-zookeeper:2181
           ports:
-              - containerPort: 9092
+            - containerPort: 9092
           volumeMounts:
             - name: ftgo-kafka-persistent-storage
               mountPath: /usr/local/kafka-data
             - name: ftgo-kafka-config-volume
               mountPath: /usr/local/kafka-config
       volumes:
-      - name: ftgo-kafka-config-volume
-        configMap:
-          name: ftgo-kafka-config
+        - name: ftgo-kafka-config-volume
+          configMap:
+            name: ftgo-kafka-config
   volumeClaimTemplates:
-  - metadata:
-      name: ftgo-kafka-persistent-storage
-    spec:
-      accessModes: [ "ReadWriteOnce" ]
-      resources:
-        requests:
-          storage: 1Gi
+    - metadata:
+        name: ftgo-kafka-persistent-storage
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
 ---

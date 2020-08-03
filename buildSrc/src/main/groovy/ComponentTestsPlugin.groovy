@@ -6,9 +6,9 @@ class ComponentTestsPlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
-    
-    	project.apply(plugin: 'eclipse')
-    	
+
+        project.apply(plugin: 'eclipse')
+
         project.sourceSets {
             componentTest {
                 java {
@@ -25,7 +25,7 @@ class ComponentTestsPlugin implements Plugin<Project> {
             componentTestRuntime.extendsFrom testRuntime
         }
 
-		project.eclipse.classpath.plusConfigurations << project.configurations.componentTestCompile
+        project.eclipse.classpath.plusConfigurations << project.configurations.componentTestCompile
 
         project.task("componentTest", type: Test) {
             testClassesDir = project.sourceSets.componentTest.output.classesDir

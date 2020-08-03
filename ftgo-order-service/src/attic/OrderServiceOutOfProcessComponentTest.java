@@ -17,17 +17,17 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class OrderServiceOutOfProcessComponentTest extends AbstractOrderServiceComponentTest {
 
 
-  @Value("${local.server.port}")
-  private int port;
+    @Value("${local.server.port}")
+    private int port;
 
-  @Override
-  protected String baseUrl(String path) {
-    return "http://localhost:" + port + path;
-  }
+    @Override
+    protected String baseUrl(String path) {
+        return "http://localhost:" + port + path;
+    }
 
-  @Configuration
-  @EnableAutoConfiguration
-  @Import({CommonTestConfiguration.class, TramJdbcKafkaConfiguration.class})
-  public static class TestConfiguration {
-  }
+    @Configuration
+    @EnableAutoConfiguration
+    @Import({CommonTestConfiguration.class, TramJdbcKafkaConfiguration.class})
+    public static class TestConfiguration {
+    }
 }

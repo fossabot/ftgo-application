@@ -5,10 +5,8 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import io.eventuate.tram.jdbckafka.TramJdbcKafkaConfiguration;
 import io.eventuate.tram.events.publisher.DomainEventPublisher;
-import io.eventuate.tram.messaging.common.ChannelMapping;
-import io.eventuate.tram.messaging.common.DefaultChannelMapping;
+import io.eventuate.tram.jdbckafka.TramJdbcKafkaConfiguration;
 import io.eventuate.tram.messaging.consumer.MessageConsumer;
 import io.eventuate.tram.sagas.testing.SagaParticipantChannels;
 import io.eventuate.tram.sagas.testing.SagaParticipantStubManager;
@@ -55,164 +53,164 @@ import static org.junit.Assert.*;
 public class OrderServiceComponentTestStepDefinitions {
 
 
+    private Response response;
+    private long consumerId;
 
-  private Response response;
-  private long consumerId;
-
-  static {
-    CommonJsonMapperInitializer.registerMoneyModule();
-  }
-
-  private int port = 8082;
-  private String host = System.getenv("DOCKER_HOST_IP");
-
-  protected String baseUrl(String path) {
-    return String.format("http://%s:%s%s", host, port, path);
-  }
-
-  @Configuration
-  @EnableAutoConfiguration
-  @Import({TramJdbcKafkaConfiguration.class, SagaParticipantStubManagerConfiguration.class})
-  @EnableJpaRepositories(basePackageClasses = RestaurantRepository.class) // Need to verify that the restaurant has been created. Replace with verifyRestaurantCreatedInOrderService
-  @EntityScan(basePackageClasses = Order.class)
-  public static class TestConfiguration {
-
-    @Bean
-    public SagaParticipantChannels sagaParticipantChannels() {
-      return new SagaParticipantChannels("consumerService", "kitchenService", "accountingService", "orderService");
+    static {
+        CommonJsonMapperInitializer.registerMoneyModule();
     }
 
-    @Bean
-    public MessageTracker messageTracker(MessageConsumer messageConsumer) {
-      return new MessageTracker(singleton("net.chrisrichardson.ftgo.orderservice.domain.Order"), messageConsumer) ;
+    private int port = 8082;
+    private String host = System.getenv("DOCKER_HOST_IP");
+
+    protected String baseUrl(String path) {
+        return String.format("http://%s:%s%s", host, port, path);
     }
 
-  }
+    @Configuration
+    @EnableAutoConfiguration
+    @Import({TramJdbcKafkaConfiguration.class, SagaParticipantStubManagerConfiguration.class})
+    @EnableJpaRepositories(basePackageClasses = RestaurantRepository.class)
+    // Need to verify that the restaurant has been created. Replace with verifyRestaurantCreatedInOrderService
+    @EntityScan(basePackageClasses = Order.class)
+    public static class TestConfiguration {
 
-  @Autowired
-  protected SagaParticipantStubManager sagaParticipantStubManager;
+        @Bean
+        public SagaParticipantChannels sagaParticipantChannels() {
+            return new SagaParticipantChannels("consumerService", "kitchenService", "accountingService", "orderService");
+        }
 
-  @Autowired
-  protected MessageTracker messageTracker;
+        @Bean
+        public MessageTracker messageTracker(MessageConsumer messageConsumer) {
+            return new MessageTracker(singleton("net.chrisrichardson.ftgo.orderservice.domain.Order"), messageConsumer);
+        }
 
-  @Autowired
-  protected DomainEventPublisher domainEventPublisher;
+    }
 
-  @Autowired
-  protected RestaurantRepository restaurantRepository;
+    @Autowired
+    protected SagaParticipantStubManager sagaParticipantStubManager;
+
+    @Autowired
+    protected MessageTracker messageTracker;
+
+    @Autowired
+    protected DomainEventPublisher domainEventPublisher;
+
+    @Autowired
+    protected RestaurantRepository restaurantRepository;
 
 
-  @Before
-  public void setUp() {
-    sagaParticipantStubManager.reset();
-  }
+    @Before
+    public void setUp() {
+        sagaParticipantStubManager.reset();
+    }
 
-  @Given("A valid consumer")
-  public void useConsumer() {
-    sagaParticipantStubManager.
-            forChannel("consumerService")
-            .when(ValidateOrderByConsumer.class).replyWith(cm -> withSuccess());
-  }
+    @Given("A valid consumer")
+    public void useConsumer() {
+        sagaParticipantStubManager.
+                forChannel("consumerService")
+                .when(ValidateOrderByConsumer.class).replyWith(cm -> withSuccess());
+    }
 
-  public enum CreditCardType { valid, expired}
+    public enum CreditCardType {valid, expired}
 
-  @Given("using a(.?) (.*) credit card")
-  public void useCreditCard(String ignore, CreditCardType creditCard) {
-    switch (creditCard) {
-      case valid :
+    @Given("using a(.?) (.*) credit card")
+    public void useCreditCard(String ignore, CreditCardType creditCard) {
+        switch (creditCard) {
+            case valid:
+                sagaParticipantStubManager
+                        .forChannel("accountingService")
+                        .when(AuthorizeCommand.class).replyWithSuccess();
+                break;
+            case expired:
+                sagaParticipantStubManager
+                        .forChannel("accountingService")
+                        .when(AuthorizeCommand.class).replyWithFailure();
+                break;
+            default:
+                fail("Don't know what to do with this credit card");
+        }
+    }
+
+    @Given("the restaurant is accepting orders")
+    public void restaurantAcceptsOrder() {
         sagaParticipantStubManager
-                .forChannel("accountingService")
-                .when(AuthorizeCommand.class).replyWithSuccess();
-        break;
-      case expired:
-        sagaParticipantStubManager
-                .forChannel("accountingService")
-                .when(AuthorizeCommand.class).replyWithFailure();
-        break;
-      default:
-        fail("Don't know what to do with this credit card");
+                .forChannel("kitchenService")
+                .when(CreateTicket.class).replyWith(cm -> withSuccess(new CreateTicketReply(cm.getCommand().getOrderId())))
+                .when(ConfirmCreateTicket.class).replyWithSuccess()
+                .when(CancelCreateTicket.class).replyWithSuccess();
+
+        if (!restaurantRepository.findById(RestaurantMother.AJANTA_ID).isPresent()) {
+            domainEventPublisher.publish("net.chrisrichardson.ftgo.restaurantservice.domain.Restaurant", RestaurantMother.AJANTA_ID,
+                    Collections.singletonList(new RestaurantCreated(RestaurantMother.AJANTA_RESTAURANT_NAME, AJANTA_RESTAURANT_MENU)));
+
+            eventually(() -> {
+                FtgoTestUtil.assertPresent(restaurantRepository.findById(RestaurantMother.AJANTA_ID));
+            });
+        }
     }
-  }
 
-  @Given("the restaurant is accepting orders")
-  public void restaurantAcceptsOrder() {
-    sagaParticipantStubManager
-            .forChannel("kitchenService")
-            .when(CreateTicket.class).replyWith(cm -> withSuccess(new CreateTicketReply(cm.getCommand().getOrderId())))
-            .when(ConfirmCreateTicket.class).replyWithSuccess()
-            .when(CancelCreateTicket.class).replyWithSuccess();
+    @When("I place an order for Chicken Vindaloo at Ajanta")
+    public void placeOrder() {
 
-    if (!restaurantRepository.findById(RestaurantMother.AJANTA_ID).isPresent()) {
-      domainEventPublisher.publish("net.chrisrichardson.ftgo.restaurantservice.domain.Restaurant", RestaurantMother.AJANTA_ID,
-              Collections.singletonList(new RestaurantCreated(RestaurantMother.AJANTA_RESTAURANT_NAME, AJANTA_RESTAURANT_MENU)));
-
-      eventually(() -> {
-        FtgoTestUtil.assertPresent(restaurantRepository.findById(RestaurantMother.AJANTA_ID));
-      });
+        response = given().
+                body(new CreateOrderRequest(consumerId,
+                        RestaurantMother.AJANTA_ID, Collections.singletonList(
+                        new CreateOrderRequest.LineItem(RestaurantMother.CHICKEN_VINDALOO_MENU_ITEM_ID,
+                                OrderDetailsMother.CHICKEN_VINDALOO_QUANTITY)))).
+                contentType("application/json").
+                when().
+                post(baseUrl("/orders"));
     }
-  }
 
-  @When("I place an order for Chicken Vindaloo at Ajanta")
-  public void placeOrder() {
+    @Then("the order should be (.*)")
+    public void theOrderShouldBeInState(String desiredOrderState) {
 
-    response = given().
-            body(new CreateOrderRequest(consumerId,
-                    RestaurantMother.AJANTA_ID, Collections.singletonList(
-                            new CreateOrderRequest.LineItem(RestaurantMother.CHICKEN_VINDALOO_MENU_ITEM_ID,
-                                                            OrderDetailsMother.CHICKEN_VINDALOO_QUANTITY)))).
-            contentType("application/json").
-            when().
-            post(baseUrl("/orders"));
-  }
-
-  @Then("the order should be (.*)")
-  public void theOrderShouldBeInState(String desiredOrderState) {
-
-      // TODO This doesn't make sense when the `OrderService` is live => duplicate replies
+        // TODO This doesn't make sense when the `OrderService` is live => duplicate replies
 
 //    sagaParticipantStubManager
 //            .forChannel("orderService")
 //            .when(ApproveOrderCommand.class).replyWithSuccess();
 //
-    Integer orderId =
-            this.response.
+        Integer orderId =
+                this.response.
+                        then().
+                        statusCode(200).
+                        extract().
+                        path("orderId");
+
+        assertNotNull(orderId);
+
+        eventually(() -> {
+            String state = given().
+                    when().
+                    get(baseUrl("/orders/" + orderId)).
                     then().
-                    statusCode(200).
-                    extract().
-                    path("orderId");
+                    statusCode(200)
+                    .extract().
+                            path("state");
+            assertEquals(desiredOrderState, state);
+        });
 
-    assertNotNull(orderId);
+        sagaParticipantStubManager.verifyCommandReceived("kitchenService", CreateTicket.class);
 
-    eventually(() -> {
-      String state = given().
-              when().
-              get(baseUrl("/orders/" + orderId)).
-              then().
-              statusCode(200)
-              .extract().
-                      path("state");
-      assertEquals(desiredOrderState, state);
-    });
+    }
 
-    sagaParticipantStubManager.verifyCommandReceived("kitchenService", CreateTicket.class);
+    @And("an (.*) event should be published")
+    public void verifyEventPublished(String expectedEventClass) {
+        messageTracker.assertDomainEventPublished("net.chrisrichardson.ftgo.orderservice.domain.Order",
+                findEventClass(expectedEventClass, "net.chrisrichardson.ftgo.orderservice.domain", "net.chrisrichardson.ftgo.orderservice.api.events"));
+    }
 
-  }
-
-  @And("an (.*) event should be published")
-  public void verifyEventPublished(String expectedEventClass) {
-    messageTracker.assertDomainEventPublished("net.chrisrichardson.ftgo.orderservice.domain.Order",
-            findEventClass(expectedEventClass, "net.chrisrichardson.ftgo.orderservice.domain", "net.chrisrichardson.ftgo.orderservice.api.events"));
-  }
-
-  private String findEventClass(String expectedEventClass, String... packages) {
-    return Arrays.stream(packages).map(p -> p + "." + expectedEventClass).filter(className -> {
-      try {
-        Class.forName(className);
-        return true;
-      } catch (ClassNotFoundException e) {
-        return false;
-      }
-    }).findFirst().orElseThrow(() -> new RuntimeException(String.format("Cannot find class %s in packages %s", expectedEventClass, String.join(",", packages))));
-  }
+    private String findEventClass(String expectedEventClass, String... packages) {
+        return Arrays.stream(packages).map(p -> p + "." + expectedEventClass).filter(className -> {
+            try {
+                Class.forName(className);
+                return true;
+            } catch (ClassNotFoundException e) {
+                return false;
+            }
+        }).findFirst().orElseThrow(() -> new RuntimeException(String.format("Cannot find class %s in packages %s", expectedEventClass, String.join(",", packages))));
+    }
 
 }

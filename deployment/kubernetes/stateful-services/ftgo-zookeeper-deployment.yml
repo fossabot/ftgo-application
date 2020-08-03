@@ -6,8 +6,8 @@ metadata:
     name: ftgo-zookeeper
 spec:
   ports:
-  - port: 2181
-    targetPort: 2181
+    - port: 2181
+      targetPort: 2181
   clusterIP: None
   selector:
     role: ftgo-zookeeper
@@ -29,16 +29,16 @@ spec:
         - name: ftgo-zookeeper
           image: eventuateio/eventuateio-local-zookeeper:0.14.0
           ports:
-              - containerPort: 2181
+            - containerPort: 2181
           volumeMounts:
             - name: ftgo-zookeeper-persistent-storage
               mountPath: /usr/local/zookeeper-data
   volumeClaimTemplates:
-  - metadata:
-      name: ftgo-zookeeper-persistent-storage
-    spec:
-      accessModes: [ "ReadWriteOnce" ]
-      resources:
-        requests:
-          storage: 1Gi
+    - metadata:
+        name: ftgo-zookeeper-persistent-storage
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
 ---

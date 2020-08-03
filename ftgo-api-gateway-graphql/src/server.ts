@@ -1,5 +1,5 @@
 import * as express from 'express'
-import {Request} from 'express';
+import {Request} from 'express'
 
 const {graphqlExpress} = require("apollo-server-express");
 const bodyParser = require("body-parser");

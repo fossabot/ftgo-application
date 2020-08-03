@@ -9,8 +9,8 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan
 public class ApiGatewayApplication {
 
-  public static void main(String[] args) {
-    SpringApplication.run(ApiGatewayApplication.class, args);
-  }
+    public static void main(String[] args) {
+        SpringApplication.run(ApiGatewayApplication.class, args);
+    }
 }
 

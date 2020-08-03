@@ -20,7 +20,7 @@ test('query consumer', () => {
         return {id: consumerId}
     });
 
-    const query = gql `
+    const query = gql`
     query { consumer(consumerId:1)  { id, firstName, lastName} }
   `;
 
@@ -38,7 +38,7 @@ test('query consumer with variables', () => {
         return {id: consumerId}
     });
 
-    const query = gql `
+    const query = gql`
     query foo($cid: Int!) {
       consumer(consumerId: $cid) {
         id    firstName    lastName    __typename  
@@ -60,7 +60,7 @@ test('query consumer 2', () => {
         return {id: consumerId}
     });
 
-    const query = gql `
+    const query = gql`
     query a1 {
       c1: consumer (consumerId:1)  { id, firstName, lastName}
       c2: consumer (consumerId:2)  { id, firstName, lastName}
@@ -94,7 +94,7 @@ test('query consumer and orders', () => {
         return {id: 101, name: 'Ajanta'}
     });
 
-    const query = gql `
+    const query = gql`
     query { consumer(consumerId:1)  { id, firstName, lastName  orders { orderId restaurant {id name }} } }
   `;
 

@@ -40,89 +40,89 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes= OrderServiceOutOfProcessComponentV0Test.TestConfiguration.class,
-        webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT,
-      properties = "customer.service.url=http://localhost:8888/customers/{customerId}")
+@SpringBootTest(classes = OrderServiceOutOfProcessComponentV0Test.TestConfiguration.class,
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+        properties = "customer.service.url=http://localhost:8888/customers/{customerId}")
 @AutoConfigureStubRunner(ids =
         {"net.chrisrichardson.ftgo:ftgo-accounting-service-contracts", "net.chrisrichardson.ftgo:ftgo-consumer-service-contracts",
                 "net.chrisrichardson.ftgo:ftgo-kitchen-service-contracts"}
-        )
+)
 @DirtiesContext
 public class OrderServiceOutOfProcessComponentV0Test {
 
-  @Configuration
-  @EnableAutoConfiguration
-  @Import({OrderWebConfiguration.class, OrderServiceMessagingConfiguration.class,  OrderCommandHandlersConfiguration.class,
-          TramCommandProducerConfiguration.class,
-          TramInMemoryConfiguration.class})
-  public static class TestConfiguration {
+    @Configuration
+    @EnableAutoConfiguration
+    @Import({OrderWebConfiguration.class, OrderServiceMessagingConfiguration.class, OrderCommandHandlersConfiguration.class,
+            TramCommandProducerConfiguration.class,
+            TramInMemoryConfiguration.class})
+    public static class TestConfiguration {
 
-    @Bean
-    public ChannelMapping channelMapping() {
-      return new DefaultChannelMapping.DefaultChannelMappingBuilder().build();
+        @Bean
+        public ChannelMapping channelMapping() {
+            return new DefaultChannelMapping.DefaultChannelMappingBuilder().build();
+        }
+
+
+        @Bean
+        public DataSource dataSource() {
+            EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
+            return builder.setType(EmbeddedDatabaseType.H2)
+                    .addScript("eventuate-tram-embedded-schema.sql")
+                    .addScript("eventuate-tram-sagas-embedded.sql")
+                    .build();
+        }
+
+
+        @Bean
+        public EventuateTramRoutesConfigurer eventuateTramRoutesConfigurer(BatchStubRunner batchStubRunner) {
+            return new EventuateTramRoutesConfigurer(batchStubRunner);
+        }
     }
 
+    @Value("${local.server.port}")
+    private int port;
 
-    @Bean
-    public DataSource dataSource() {
-      EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
-      return builder.setType(EmbeddedDatabaseType.H2)
-              .addScript("eventuate-tram-embedded-schema.sql")
-              .addScript("eventuate-tram-sagas-embedded.sql")
-              .build();
+    private String baseUrl(String path) {
+        return "http://localhost:" + port + path;
     }
 
+    @Autowired
+    private MessageVerifier verifier;
 
-    @Bean
-    public EventuateTramRoutesConfigurer eventuateTramRoutesConfigurer(BatchStubRunner batchStubRunner) {
-      return new EventuateTramRoutesConfigurer(batchStubRunner);
+    @Autowired
+    private DomainEventPublisher domainEventPublisher;
+
+    @Autowired
+    private RestaurantRepository restaurantRepository;
+
+    @Autowired
+    private OrderService orderService;
+
+    @Autowired
+    private OrderRepository orderRepository;
+
+
+    @Test
+    public void shouldCreateOrder() throws InterruptedException {
+        domainEventPublisher.publish("net.chrisrichardson.ftgo.restaurantservice.domain.Restaurant", RestaurantMother.AJANTA_ID,
+                Collections.singletonList(new RestaurantCreated(RestaurantMother.AJANTA_RESTAURANT_NAME,
+                        new RestaurantMenu(Collections.singletonList(RestaurantMother.CHICKEN_VINDALOO_MENU_ITEM)))));
+
+        Eventually.eventually(() -> {
+            FtgoTestUtil.assertPresent(restaurantRepository.findById(RestaurantMother.AJANTA_ID));
+        });
+
+
+        Order order = orderService.createOrder(OrderDetailsMother.CONSUMER_ID,
+                RestaurantMother.AJANTA_ID,
+                Collections.singletonList(OrderDetailsMother.CHICKEN_VINDALOO_MENU_ITEM_AND_QUANTITY));
+
+
+        Eventually.eventually(() -> {
+            Order o = orderRepository.findById(order.getId());
+            assertNotNull(o);
+            assertEquals(OrderState.AUTHORIZED, o.getState());
+        });
     }
-  }
-
-  @Value("${local.server.port}")
-  private int port;
-
-  private String baseUrl(String path) {
-    return "http://localhost:" + port + path;
-  }
-
-  @Autowired
-  private MessageVerifier verifier;
-
-  @Autowired
-  private DomainEventPublisher domainEventPublisher;
-
-  @Autowired
-  private RestaurantRepository restaurantRepository;
-
-  @Autowired
-  private OrderService orderService;
-
-  @Autowired
-  private OrderRepository orderRepository;
-
-
-  @Test
-  public void shouldCreateOrder() throws InterruptedException {
-    domainEventPublisher.publish("net.chrisrichardson.ftgo.restaurantservice.domain.Restaurant", RestaurantMother.AJANTA_ID,
-            Collections.singletonList(new RestaurantCreated(RestaurantMother.AJANTA_RESTAURANT_NAME,
-                    new RestaurantMenu(Collections.singletonList(RestaurantMother.CHICKEN_VINDALOO_MENU_ITEM)))));
-
-    Eventually.eventually(() -> {
-      FtgoTestUtil.assertPresent(restaurantRepository.findById(RestaurantMother.AJANTA_ID));
-    });
-
-
-    Order order = orderService.createOrder(OrderDetailsMother.CONSUMER_ID,
-            RestaurantMother.AJANTA_ID,
-            Collections.singletonList(OrderDetailsMother.CHICKEN_VINDALOO_MENU_ITEM_AND_QUANTITY));
-
-
-    Eventually.eventually(() -> {
-      Order o = orderRepository.findById(order.getId());
-      assertNotNull(o);
-      assertEquals(OrderState.AUTHORIZED, o.getState());
-    });
-  }
 
 }

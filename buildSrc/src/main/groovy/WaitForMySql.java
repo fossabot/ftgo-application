@@ -9,85 +9,86 @@ import java.util.function.Supplier;
 
 public class WaitForMySql extends DefaultTask {
 
-  @TaskAction
-  public void waitForMySql() {
-    System.out.println("Waiting for MySql...");
+    @TaskAction
+    public void waitForMySql() {
+        System.out.println("Waiting for MySql...");
 
-    loadDriver();
+        loadDriver();
 
-    waitForConnection();
-  }
-
-  private String getenv(String name, String defaultValue) {
-    return Optional.ofNullable(System.getenv(name)).orElse(defaultValue);
-  }
-  private String getenv(String name, Supplier<String> defaultValue) {
-    return Optional.ofNullable(System.getenv(name)).orElseGet(defaultValue);
-  }
-
-  private void loadDriver() {
-    try {
-      System.out.println("Trying to initialize driver");
-
-      String datasourceDriverClassName = getenv("SPRING_DATASOURCE_DRIVER_CLASS_NAME", "com.mysql.jdbc.Driver");
-      Class.forName(datasourceDriverClassName);
-
-      System.out.println("Initialization succeed");
-    } catch (ClassNotFoundException e) {
-      System.out.println("Initialization failed");
-
-      throw new RuntimeException(e);
+        waitForConnection();
     }
-  }
 
-  private void waitForConnection() {
-    while (true) {
-      Connection connection = null;
-      try {
-        System.out.println("Trying to connect...");
+    private String getenv(String name, String defaultValue) {
+        return Optional.ofNullable(System.getenv(name)).orElse(defaultValue);
+    }
 
-        String datasourceUrl = getenv("SPRING_DATASOURCE_URL", () -> String.format("jdbc:mysql://%s/eventuate", getenv("DOCKER_HOST_IP", "localhost")));
-        String datasourceUsername = getenv("SPRING_DATASOURCE_USERNAME", "mysqluser");
-        String datasourcePassword = getenv("SPRING_DATASOURCE_PASSWORD", "mysqlpw");
+    private String getenv(String name, Supplier<String> defaultValue) {
+        return Optional.ofNullable(System.getenv(name)).orElseGet(defaultValue);
+    }
 
-        connection = DriverManager.getConnection(datasourceUrl, datasourceUsername, datasourcePassword);
+    private void loadDriver() {
+        try {
+            System.out.println("Trying to initialize driver");
 
-        System.out.println("Connection succeed");
+            String datasourceDriverClassName = getenv("SPRING_DATASOURCE_DRIVER_CLASS_NAME", "com.mysql.jdbc.Driver");
+            Class.forName(datasourceDriverClassName);
 
-        break;
-      } catch (SQLException e) {
-        System.out.println("Connection failed");
+            System.out.println("Initialization succeed");
+        } catch (ClassNotFoundException e) {
+            System.out.println("Initialization failed");
 
-        sleep();
-      } finally {
-        if (connection != null) {
-          closeConnection(connection);
+            throw new RuntimeException(e);
         }
-      }
     }
-  }
 
-  private void closeConnection(Connection connection) {
-    try {
-      System.out.println("Trying to close connection");
+    private void waitForConnection() {
+        while (true) {
+            Connection connection = null;
+            try {
+                System.out.println("Trying to connect...");
 
-      connection.close();
+                String datasourceUrl = getenv("SPRING_DATASOURCE_URL", () -> String.format("jdbc:mysql://%s/eventuate", getenv("DOCKER_HOST_IP", "localhost")));
+                String datasourceUsername = getenv("SPRING_DATASOURCE_USERNAME", "mysqluser");
+                String datasourcePassword = getenv("SPRING_DATASOURCE_PASSWORD", "mysqlpw");
 
-      System.out.println("Connection closed");
-    } catch (SQLException e) {
-      System.out.println("Failed to close connection, see stack trace:");
+                connection = DriverManager.getConnection(datasourceUrl, datasourceUsername, datasourcePassword);
 
-      e.printStackTrace();
+                System.out.println("Connection succeed");
+
+                break;
+            } catch (SQLException e) {
+                System.out.println("Connection failed");
+
+                sleep();
+            } finally {
+                if (connection != null) {
+                    closeConnection(connection);
+                }
+            }
+        }
     }
-  }
 
-  private void sleep() {
-    System.out.println("sleeping for 5 seconds...");
+    private void closeConnection(Connection connection) {
+        try {
+            System.out.println("Trying to close connection");
 
-    try {
-      Thread.sleep(5000);
-    } catch (InterruptedException ie) {
-      throw new RuntimeException(ie);
+            connection.close();
+
+            System.out.println("Connection closed");
+        } catch (SQLException e) {
+            System.out.println("Failed to close connection, see stack trace:");
+
+            e.printStackTrace();
+        }
     }
-  }
+
+    private void sleep() {
+        System.out.println("sleeping for 5 seconds...");
+
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException ie) {
+            throw new RuntimeException(ie);
+        }
+    }
 }

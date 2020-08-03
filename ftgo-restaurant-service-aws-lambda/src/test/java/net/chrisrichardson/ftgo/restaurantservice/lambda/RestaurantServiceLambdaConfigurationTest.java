@@ -11,8 +11,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(classes = RestaurantServiceLambdaConfiguration.class)
 public class RestaurantServiceLambdaConfigurationTest {
 
-  @Autowired
-  private RestaurantService restaurantService;
-  @Test
-  public void shouldInitialize() {}
+    @Autowired
+    private RestaurantService restaurantService;
+
+    @Test
+    public void shouldInitialize() {
+    }
 }

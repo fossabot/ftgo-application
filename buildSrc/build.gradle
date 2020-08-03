@@ -1,4 +1,4 @@
-test.enabled=false
+test.enabled = false
 
 repositories {
     mavenCentral()

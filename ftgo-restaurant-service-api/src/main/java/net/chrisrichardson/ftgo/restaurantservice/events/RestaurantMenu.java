@@ -15,38 +15,38 @@ import java.util.List;
 public class RestaurantMenu {
 
 
-  @ElementCollection
-  private List<MenuItem> menuItems;
+    @ElementCollection
+    private List<MenuItem> menuItems;
 
-  private RestaurantMenu() {
-  }
+    private RestaurantMenu() {
+    }
 
-  @Override
-  public boolean equals(Object o) {
-    return EqualsBuilder.reflectionEquals(this, o);
-  }
+    @Override
+    public boolean equals(Object o) {
+        return EqualsBuilder.reflectionEquals(this, o);
+    }
 
-  @Override
-  public int hashCode() {
-    return HashCodeBuilder.reflectionHashCode(this);
-  }
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
+    }
 
-  public List<MenuItem> getMenuItems() {
-    return menuItems;
-  }
+    public List<MenuItem> getMenuItems() {
+        return menuItems;
+    }
 
-  @Override
-  public String toString() {
-    return ToStringBuilder.reflectionToString(this);
-  }
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
 
-  public void setMenuItems(List<MenuItem> menuItems) {
-    this.menuItems = menuItems;
-  }
+    public void setMenuItems(List<MenuItem> menuItems) {
+        this.menuItems = menuItems;
+    }
 
-  public RestaurantMenu(List<MenuItem> menuItems) {
+    public RestaurantMenu(List<MenuItem> menuItems) {
 
-    this.menuItems = menuItems;
-  }
+        this.menuItems = menuItems;
+    }
 
 }

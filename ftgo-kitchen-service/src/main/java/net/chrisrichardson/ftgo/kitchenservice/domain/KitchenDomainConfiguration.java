@@ -19,13 +19,13 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Import({TramEventsPublisherConfiguration.class, CommonConfiguration.class})
 public class KitchenDomainConfiguration {
 
-  @Bean
-  public KitchenService kitchenService() {
-    return new KitchenService();
-  }
+    @Bean
+    public KitchenService kitchenService() {
+        return new KitchenService();
+    }
 
-  @Bean
-  public TicketDomainEventPublisher restaurantAggregateEventPublisher(DomainEventPublisher domainEventPublisher) {
-    return new TicketDomainEventPublisher(domainEventPublisher);
-  }
+    @Bean
+    public TicketDomainEventPublisher restaurantAggregateEventPublisher(DomainEventPublisher domainEventPublisher) {
+        return new TicketDomainEventPublisher(domainEventPublisher);
+    }
 }
