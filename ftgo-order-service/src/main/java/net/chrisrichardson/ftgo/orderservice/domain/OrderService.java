@@ -53,6 +53,12 @@ public class OrderService {
         this.meterRegistry = meterRegistry;
     }
 
+    /**
+     * @param consumerId   消费者Id
+     * @param restaurantId 餐馆Id
+     * @param lineItems    菜单的Id和数量
+     * @return 订单
+     */
     public Order createOrder(long consumerId, long restaurantId,
                              List<MenuItemIdAndQuantity> lineItems) {
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
@@ -60,16 +66,20 @@ public class OrderService {
 
         List<OrderLineItem> orderLineItems = makeOrderLineItems(lineItems, restaurant);
 
+        // 创建Order
         ResultWithDomainEvents<Order, OrderDomainEvent> orderAndEvents =
                 Order.createOrder(consumerId, restaurant, orderLineItems);
 
+        // 将Order持久化，保存在数据库中
         Order order = orderAndEvents.result;
         orderRepository.save(order);
 
+        // 发布领域事件
         orderAggregateEventPublisher.publish(order, orderAndEvents.events);
 
         OrderDetails orderDetails = new OrderDetails(consumerId, restaurantId, orderLineItems, order.getOrderTotal());
 
+        // 创建CreateOrderSaga
         CreateOrderSagaState data = new CreateOrderSagaState(order.getId(), orderDetails);
         createOrderSagaManager.create(data, Order.class, order.getId());
 
@@ -81,8 +91,8 @@ public class OrderService {
 
     private List<OrderLineItem> makeOrderLineItems(List<MenuItemIdAndQuantity> lineItems, Restaurant restaurant) {
         return lineItems.stream().map(li -> {
-            MenuItem om = restaurant.findMenuItem(li.getMenuItemId()).orElseThrow(() -> new InvalidMenuItemIdException(li.getMenuItemId()));
-            return new OrderLineItem(li.getMenuItemId(), om.getName(), om.getPrice(), li.getQuantity());
+            MenuItem menuItem = restaurant.findMenuItem(li.getMenuItemId()).orElseThrow(() -> new InvalidMenuItemIdException(li.getMenuItemId()));
+            return new OrderLineItem(li.getMenuItemId(), menuItem.getName(), menuItem.getPrice(), li.getQuantity());
         }).collect(toList());
     }
 

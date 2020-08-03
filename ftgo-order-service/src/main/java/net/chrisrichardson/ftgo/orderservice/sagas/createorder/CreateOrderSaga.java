@@ -25,9 +25,9 @@ public class CreateOrderSaga implements SimpleSaga<CreateOrderSagaState> {
                         .step()
                         .invokeParticipant(consumerService.validateOrder, CreateOrderSagaState::makeValidateOrderByConsumerCommand)
                         .step()
-                        .invokeParticipant(kitchenService.create, CreateOrderSagaState::makeCreateTicketCommand)
-                        .onReply(CreateTicketReply.class, CreateOrderSagaState::handleCreateTicketReply)
-                        .withCompensation(kitchenService.cancel, CreateOrderSagaState::makeCancelCreateTicketCommand)
+                        .invokeParticipant(kitchenService.create, CreateOrderSagaState::makeCreateTicketCommand) // 定义转发事务
+                        .onReply(CreateTicketReply.class, CreateOrderSagaState::handleCreateTicketReply) // 收到成功回复后，调用handleCreateTicketReply()
+                        .withCompensation(kitchenService.cancel, CreateOrderSagaState::makeCancelCreateTicketCommand) // 定义补偿事务
                         .step()
                         .invokeParticipant(accountingService.authorize, CreateOrderSagaState::makeAuthorizeCommand)
                         .step()
