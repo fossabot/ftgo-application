@@ -43,6 +43,4 @@ public class CreateOrderSaga implements SimpleSaga<CreateOrderSagaState> {
     public SagaDefinition<CreateOrderSagaState> getSagaDefinition() {
         return sagaDefinition;
     }
-
-
 }
