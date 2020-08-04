@@ -9,6 +9,7 @@ import javax.persistence.*;
 import java.util.List;
 import java.util.Optional;
 
+// TODO: 2020/8/4 不太清楚Restaurant的表结构
 @Entity
 @Table(name = "order_service_restaurants")
 @Access(AccessType.FIELD)

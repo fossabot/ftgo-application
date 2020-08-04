@@ -26,6 +26,13 @@ public class OrderController {
         this.orderRepository = orderRepository;
     }
 
+    /**
+     * 创建订单的REST API
+     * 通过{@link CreateOrderRequest}进行创建{@link Order}
+     *
+     * @param request
+     * @return
+     */
     @RequestMapping(method = RequestMethod.POST)
     public CreateOrderResponse create(@RequestBody CreateOrderRequest request) {
         Order order = orderService.createOrder(request.getConsumerId(),

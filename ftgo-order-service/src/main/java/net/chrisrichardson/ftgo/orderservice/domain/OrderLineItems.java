@@ -52,6 +52,11 @@ public class OrderLineItems {
         });
     }
 
+    /**
+     * 计算订单的总钱数
+     *
+     * @return
+     */
     Money orderTotal() {
         return lineItems.stream().map(OrderLineItem::getTotal).reduce(Money.ZERO, Money::add);
     }

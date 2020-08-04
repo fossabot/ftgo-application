@@ -1,5 +1,11 @@
 package net.chrisrichardson.ftgo.orderservice.web;
 
+/**
+ * 这里通过
+ *
+ * @see net.chrisrichardson.ftgo.orderservice.api.web.CreateOrderRequest.LineItem
+ * 做了一个转换
+ */
 public class MenuItemIdAndQuantity {
 
     private String menuItemId;

@@ -88,7 +88,13 @@ public class OrderService {
         return order;
     }
 
-
+    /**
+     * 通过食品的Id和餐厅中食品的Id进行比较
+     *
+     * @param lineItems
+     * @param restaurant
+     * @return
+     */
     private List<OrderLineItem> makeOrderLineItems(List<MenuItemIdAndQuantity> lineItems, Restaurant restaurant) {
         return lineItems.stream().map(li -> {
             MenuItem menuItem = restaurant.findMenuItem(li.getMenuItemId()).orElseThrow(() -> new InvalidMenuItemIdException(li.getMenuItemId()));

@@ -2,6 +2,13 @@ package net.chrisrichardson.ftgo.orderservice.api.web;
 
 import java.util.List;
 
+/**
+ * 餐馆Id
+ * 消费者Id
+ * 点餐具体信息：
+ * -- 1. 食品Id
+ * -- 2. 食品数量
+ */
 public class CreateOrderRequest {
 
     private long restaurantId;
@@ -42,6 +49,10 @@ public class CreateOrderRequest {
         this.lineItems = lineItems;
     }
 
+    /**
+     * menuItemId：食品Id
+     * quantity：食品数量
+     */
     public static class LineItem {
 
         private String menuItemId;
@@ -72,8 +83,5 @@ public class CreateOrderRequest {
             this.menuItemId = menuItemId;
 
         }
-
     }
-
-
 }

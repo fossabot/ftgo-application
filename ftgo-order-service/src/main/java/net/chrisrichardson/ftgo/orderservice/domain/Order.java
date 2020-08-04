@@ -17,13 +17,20 @@ import static net.chrisrichardson.ftgo.orderservice.api.events.OrderState.*;
 @Access(AccessType.FIELD)
 public class Order {
 
-    public static ResultWithDomainEvents<Order, OrderDomainEvent>
-    createOrder(long consumerId, Restaurant restaurant, List<OrderLineItem> orderLineItems) {
+    /**
+     * 创建订单，需要消费者Id，餐馆Id，点餐的列表
+     *
+     * @param consumerId
+     * @param restaurant
+     * @param orderLineItems
+     * @return
+     */
+    public static ResultWithDomainEvents<Order, OrderDomainEvent> createOrder(long consumerId, Restaurant restaurant, List<OrderLineItem> orderLineItems) {
         Order order = new Order(consumerId, restaurant.getId(), orderLineItems);
-        List<OrderDomainEvent> events = singletonList(new OrderCreatedEvent(
-                new OrderDetails(consumerId, restaurant.getId(), orderLineItems,
-                        order.getOrderTotal()),
-                restaurant.getName()));
+        List<OrderDomainEvent> events =
+                singletonList(
+                        new OrderCreatedEvent(new OrderDetails(consumerId, restaurant.getId(), orderLineItems, order.getOrderTotal()), restaurant.getName())
+                );
         return new ResultWithDomainEvents<>(order, events);
     }
 
