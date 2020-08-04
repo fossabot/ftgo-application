@@ -5,6 +5,9 @@ import io.eventuate.tram.sagas.simpledsl.CommandEndpoint;
 import io.eventuate.tram.sagas.simpledsl.CommandEndpointBuilder;
 import net.chrisrichardson.ftgo.kitchenservice.api.*;
 
+/**
+ * Kitchen Service命令式消息端点
+ */
 public class KitchenServiceProxy {
 
     public final CommandEndpoint<CreateTicket> create = CommandEndpointBuilder

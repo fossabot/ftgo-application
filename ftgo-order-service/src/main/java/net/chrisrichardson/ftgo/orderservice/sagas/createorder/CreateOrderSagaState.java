@@ -63,6 +63,11 @@ public class CreateOrderSagaState {
         return ticketId;
     }
 
+    /**
+     * 创建CreateTicket命令式消息
+     *
+     * @return
+     */
     CreateTicket makeCreateTicketCommand() {
         return new CreateTicket(getOrderDetails().getRestaurantId(), getOrderId(), makeTicketDetails(getOrderDetails()));
     }
@@ -80,6 +85,11 @@ public class CreateOrderSagaState {
         return new TicketLineItem(orderLineItem.getMenuItemId(), orderLineItem.getName(), orderLineItem.getQuantity());
     }
 
+    /**
+     * 保存新建Ticket的Id
+     *
+     * @param reply
+     */
     void handleCreateTicketReply(CreateTicketReply reply) {
         logger.debug("getTicketId {}", reply.getTicketId());
         setTicketId(reply.getTicketId());
