@@ -35,9 +35,7 @@ public class CreateOrderSaga implements SimpleSaga<CreateOrderSagaState> {
                         .step()
                         .invokeParticipant(orderService.approve, CreateOrderSagaState::makeApproveOrderCommand)
                         .build();
-
     }
-
 
     @Override
     public SagaDefinition<CreateOrderSagaState> getSagaDefinition() {

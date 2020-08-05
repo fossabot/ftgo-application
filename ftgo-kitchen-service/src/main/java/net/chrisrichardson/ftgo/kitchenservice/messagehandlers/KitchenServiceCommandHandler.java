@@ -14,6 +14,9 @@ import static io.eventuate.tram.commands.consumer.CommandHandlerReplyBuilder.wit
 import static io.eventuate.tram.commands.consumer.CommandHandlerReplyBuilder.withSuccess;
 import static io.eventuate.tram.sagas.participant.SagaReplyMessageBuilder.withLock;
 
+/**
+ * 处理Order Service实现的各种Saga发送的消息
+ */
 public class KitchenServiceCommandHandler {
 
     @Autowired
@@ -36,13 +39,18 @@ public class KitchenServiceCommandHandler {
                 .build();
     }
 
+    /**
+     * 创建订单
+     *
+     * @param cm
+     * @return
+     */
     private Message createTicket(CommandMessage<CreateTicket>
                                          cm) {
         CreateTicket command = cm.getCommand();
         long restaurantId = command.getRestaurantId();
         Long ticketId = command.getOrderId();
         TicketDetails ticketDetails = command.getTicketDetails();
-
 
         try {
             Ticket ticket = kitchenService.createTicket(restaurantId, ticketId, ticketDetails);

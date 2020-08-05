@@ -14,6 +14,9 @@ import java.util.Map;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 
+/**
+ * 对应交易单
+ */
 @Entity
 @Table(name = "tickets")
 @Access(AccessType.FIELD)
@@ -27,6 +30,9 @@ public class Ticket {
 
     private TicketState previousState;
 
+    /**
+     * 餐厅的Id
+     */
     private Long restaurantId;
 
     @ElementCollection
@@ -53,6 +59,11 @@ public class Ticket {
         this.lineItems = details.getLineItems();
     }
 
+    /**
+     * 确认创建订单
+     *
+     * @return
+     */
     public List<TicketDomainEvent> confirmCreate() {
         switch (state) {
             case CREATE_PENDING:
@@ -67,7 +78,11 @@ public class Ticket {
         throw new NotYetImplementedException();
     }
 
-
+    /**
+     *
+     * @param readyBy
+     * @return
+     */
     public List<TicketDomainEvent> accept(LocalDateTime readyBy) {
         switch (state) {
             case AWAITING_ACCEPTANCE:

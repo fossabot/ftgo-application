@@ -13,14 +13,20 @@ import java.util.Map;
 @Transactional
 public class KitchenService {
 
+    /**
+     * Ticket数据库
+     */
     @Autowired
     private TicketRepository ticketRepository;
 
-    @Autowired
-    private TicketDomainEventPublisher domainEventPublisher;
-
+    /**
+     * Restaurant数据库
+     */
     @Autowired
     private RestaurantRepository restaurantRepository;
+
+    @Autowired
+    private TicketDomainEventPublisher domainEventPublisher;
 
     public void createMenu(long id, RestaurantMenu menu) {
         Restaurant restaurant = new Restaurant(id, menu.getMenuItems());
@@ -40,6 +46,13 @@ public class KitchenService {
         return rwe.result;
     }
 
+    /**
+     * 接受订单
+     *
+     * @param ticketId
+     * @param readyBy
+     */
+    // TODO: 2020/8/5 domainEventPublisher.publish发布的事件哪里接收处理了？？？
     public void accept(long ticketId, LocalDateTime readyBy) {
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new TicketNotFoundException(ticketId));
