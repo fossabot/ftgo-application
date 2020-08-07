@@ -1,5 +1,6 @@
 FROM python:2.7.16-alpine3.9
-RUN pip install awscli --upgrade
+RUN pip install --upgrade pip -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com
+RUN pip install awscli --upgrade -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com
 COPY create-dynamodb-tables.sh .
 COPY ftgo-order-history.json .
 COPY wait-for-dynamodblocal.sh .
