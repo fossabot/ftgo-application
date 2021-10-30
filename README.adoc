@@ -1,3 +1,5 @@
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fspringmonster%2Fftgo-application.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fspringmonster%2Fftgo-application?ref=badge_shield)
+
 = FTGO example application
 
 This is the example code for my book https://microservices.io/book[Microservice patterns].
@@ -217,3 +219,7 @@ If you want to delete the persistent volumes for Apache Kafka, Zookeeper and MyS
 ```
 ./deployment/kubernetes/scripts/kubernetes-delete-volumes.sh
 ```
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fspringmonster%2Fftgo-application.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fspringmonster%2Fftgo-application?ref=badge_large)
